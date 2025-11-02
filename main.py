@@ -84,6 +84,13 @@ def get_input():
         player2.append(entry2.get())
         userinfo.destroy()
 
+def on_close():
+    if hit1 > hit2:
+        winner.append(player1[0])
+    else:
+        winner.append(player2[0])
+    attacking.quit()
+    attacking.destroy()
 
 # - Variables
 ships = [2, 3, 3, 5]
@@ -189,6 +196,8 @@ mainloop()
 attacking = Tk()
 attacking.title("Attacking")
 
+attacking.protocol("WM_DELETE_WINDOW", on_close)
+
 subt1 = Label(attacking, text=f"{player1[0]}", padx=20)
 subt1.pack(side="left")
 
@@ -218,9 +227,10 @@ mainloop()
 winscreen = Tk()
 
 winscreen.title("You Won!")
-winscreen.geometry("1000x800")
+winscreen.geometry("500x400")
 
-win_label = Label(winscreen, text=f"Congratulations! {winner[0]} won!", font=("Arial", 16), anchor="center")
-win_label.pack(pady=20, padx=20)
+winscreen.configure(bg="green")
+
+win_label = Label(winscreen, text=f"Congratulations! {winner[0]} won!", font=("Arial", 16), anchor="center").grid(row=10, column=10)
 
 mainloop()
