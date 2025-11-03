@@ -72,11 +72,11 @@ class BattleShips:
             return
         if (r, c) in self.ships2:
             Button(self.frame1, text="X", width= 5, height=2, bg="green").grid(row=r, column=c)
-            hit1 += 1
-            self.score1.configure(text=f"Score: {hit1}")
+            self.hit1 += 1
+            self.score1.configure(text=f"Score: {self.hit1}")
         else:
             Button(self.frame1, text="-", width= 5, height=2, bg="red").grid(row=r, column=c)
-        if hit1 == 13:
+        if self.hit1 == 13:
             self.winner.append(self.player1[0])
             self.attacking.quit()
             self.attacking.destroy()
@@ -88,11 +88,11 @@ class BattleShips:
             return
         if (r, c) in self.ships1:
             Button(self.frame2, text="X", width= 5, height=2, bg="green").grid(row=r, column=c)
-            hit2 += 1
-            self.score2.configure(text=f"Score: {hit2}")
+            self.hit2 += 1
+            self.score2.configure(text=f"Score: {self.hit2}")
         else:
             Button(self.frame2, text="-", width= 5, height=2, bg="red").grid(row=r, column=c)
-        if hit2 == 13:
+        if self.hit2 == 13:
             self.winner.append(self.player2[0])
             self.attacking.quit()
             self.attacking.destroy()
@@ -219,9 +219,9 @@ class BattleShips:
         subt2 = Label(self.attacking, text=f"{self.player2[0]}", padx=20)
         subt2.pack(side="right")
 
-        self.score1 = Label(self.attacking, text=f"Score: {hit1}")
+        self.score1 = Label(self.attacking, text=f"Score: {self.hit1}")
         self.score1.pack(anchor="nw")
-        self.score2 = Label(self.attacking, text=f"Score: {hit2}")
+        self.score2 = Label(self.attacking, text=f"Score: {self.hit2}")
         self.score2.pack(anchor="ne")
 
         self.frame1 = Frame(self.attacking, relief="ridge", borderwidth=2)
@@ -238,8 +238,8 @@ class BattleShips:
         mainloop()
 
         if self.troll:
-            if hit1 or hit2 == 0:
-                on_complete_loss()
+            if self.hit1 or self.hit2 == 0:
+                self.on_complete_loss()
 
         winscreen = Tk()
 
