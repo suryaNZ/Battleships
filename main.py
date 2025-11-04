@@ -1,5 +1,6 @@
 from tkinter import *
 import random
+from server import Receiver
 
 class BattleShips:
 
@@ -179,6 +180,116 @@ class BattleShips:
         # Loop for second player 
         # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        
+
+
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Loop for attacking 
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+        self.attacking = Tk()
+        self.attacking.title("Attacking")
+
+        self.attacking.protocol("WM_DELETE_WINDOW", self.on_close)
+
+        subt1 = Label(self.attacking, text=f"{self.player1[0]}", padx=20)
+        subt1.pack(side="left")
+
+        subt2 = Label(self.attacking, text=f"{self.player2[0]}", padx=20)
+        subt2.pack(side="right")
+
+        self.score1 = Label(self.attacking, text=f"Score: {self.hit1}")
+        self.score1.pack(anchor="nw")
+        self.score2 = Label(self.attacking, text=f"Score: {self.hit2}")
+        self.score2.pack(anchor="ne")
+
+        self.frame1 = Frame(self.attacking, relief="ridge", borderwidth=2)
+        self.frame2 = Frame(self.attacking, relief="ridge", borderwidth=2)
+
+        self.frame1.pack(side="left", padx=10, pady=10, fill="both", expand=True)
+        self.frame2.pack(side="right", padx=10, pady=10, fill="both", expand=True)
+
+        for i in range(10):
+            for j in range(10):
+                Button(self.frame1, text="O", width=5, height=2,command=lambda r=i, c=j: self.attacking1(r, c)).grid(row=i, column=j)
+                Button(self.frame2, text="O", width=5, height=2,command=lambda r=i, c=j: self.attacking2(r, c)).grid(row=i, column=j)
+
+        mainloop()
+
+        if self.troll:
+            if self.hit1 or self.hit2 == 0:
+                self.on_complete_loss()
+
+        winscreen = Tk()
+
+        winscreen.title("You Won!")
+        winscreen.geometry("500x400")
+
+        winscreen.configure(bg="green")
+
+        if self.winner[0] != "Draw":
+            win_label = Label(winscreen, text=f"Congratulations! {self.winner[0]} won!", font=("Arial", 16), anchor="center")
+        else:
+            win_label = Label(winscreen, text=f"The game ended in a draw!", font=("Arial", 16), anchor="center")
+        win_label.pack()
+        mainloop()
+    
+    def run_multiplayer(self, rcvr: Receiver):
+         # Loop for player info
+        print("helo")
+        self.userinfo = Tk()
+
+        label = Label(self.userinfo, text="Enter Player Information:", padx=10, pady=10)
+        label.pack()
+
+        self.entry = Entry(self.userinfo)
+        self.entry2 = Entry(self.userinfo)
+
+        self.entry.pack(pady=5)
+        self.entry2.pack(pady=5)
+
+        submit = Button(self.userinfo, text="Submit", command=self.get_input)
+        submit.pack()
+
+        mainloop()
+
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Loop for first player
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+        #setting up
+        self.main = Tk()
+        self.main.title("Player 1: Setting up")
+
+        self.main_frame = Frame(self.main, relief="ridge", borderwidth=2)
+
+        self.main_frame.pack(side="bottom", padx=10, pady=10, fill="both", expand=True)
+
+        # Radio buttons
+        self.radio_var = IntVar()
+
+        vertical = Radiobutton(self.main, text="Vertical", variable=self.radio_var, value=0)
+        horizontal = Radiobutton(self.main, text="Horizontal", variable=self.radio_var, value=1)
+
+        vertical.pack()
+        horizontal.pack()
+
+        # grid
+        for i in range(10):
+            for j in range(10):
+                btn = Button(self.main_frame, text="O", width= 5, height=2, command=lambda r=i, c=j: self.on_button_click_1(r, c)).grid(row=i, column=j)
+
+        mainloop()
+
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Loop for second player 
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         self.pc1 = 0
 
         self.main2 = Tk()
@@ -254,6 +365,8 @@ class BattleShips:
             win_label = Label(winscreen, text=f"The game ended in a draw!", font=("Arial", 16), anchor="center")
         win_label.pack()
         mainloop()
-    
+
+
 engine = BattleShips()
-engine.run()
+# engine.run()
+engine.run_multiplayer(Receiver())
